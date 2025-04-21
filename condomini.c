@@ -1,5 +1,5 @@
-// vizinhos.c 
-// teste para generalizar condomini.c
+// condomini.c 
+// simulação da questão 5 da 40a Olimpíada de Matemática da Unicamp
 // jaz 21/04/25
 
 #include <stdlib.h>
