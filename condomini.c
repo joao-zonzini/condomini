@@ -1,24 +1,27 @@
-// condomini.c 
-// simulacao da questao 5 da 40a Olimpiada de Matematica da UNICAMP
-// jaz 20/04/25
+// vizinhos.c 
+// teste para generalizar condomini.c
+// jaz 21/04/25
 
 #include <stdlib.h>
 #include <stdio.h>
 
-void printar_condo(int matriz[3][3]); void inserir_perrengues(int matriz[3][3]);
-int condo_deboa(int matriz[3][3]); void troca_perrengues(int matriz[3][3]);
+#define LINHAS 3    // Número de linhas da matriz
+#define COLUNAS 3   // Número de colunas da matriz
+
+void printar_condo(int matriz[LINHAS][COLUNAS]); void inserir_perrengues(int matriz[LINHAS][COLUNAS]);
+int condo_deboa(int matriz[LINHAS][COLUNAS]); void troca_perrengues(int matriz[LINHAS][COLUNAS]);
 
 int main(void){
 	
 	// inicializando a matriz condominio com zeros
-	int condo[3][3] = {0};
+	int condo[LINHAS][COLUNAS] = {0};
 	int noite = 0;
 	int deboa = 0;
 
 	puts("Bem-vindo ao Condominio Planolandia! No Condomínio cada casa tem um número:");
 
-	for(int i = 0; i < 3; i++) {
-		for(int j = 0; j < 3; j++) {
+	for(int i = 0; i < LINHAS; i++) {
+		for(int j = 0; j < COLUNAS; j++) {
 			printf("\t%d%d ", i+1, j+1);
 		}
 		printf("\n");
@@ -58,25 +61,25 @@ int main(void){
 	return 0;
 }
 
-void printar_condo(int matriz[3][3]){
-	for(int i = 0; i < 3; i++) {
-		for(int j = 0; j < 3; j++) {
+void printar_condo(int matriz[LINHAS][COLUNAS]){
+	for(int i = 0; i < LINHAS; i++) {
+		for(int j = 0; j < COLUNAS; j++) {
 			printf("\t%d ", matriz[i][j]);
 		}
 		printf("\n");
 	}
 }
 
-void inserir_perrengues(int matriz[3][3]) {
+void inserir_perrengues(int matriz[LINHAS][COLUNAS]) {
 	int input;
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
+	for (int i = 0; i < LINHAS; i++) {
+		for (int j = 0; j < COLUNAS; j++) {
 			while (1) {
 				input = 0;
 				printf("Dê perrengues para a casa %d%d: ", i+1, j+1);
 				scanf("%d", &input);
 
-				// verificar se teste positivo
+				// verificar se input positivo
 				if(input >= 0) { // positivo
 					matriz[i][j] = input;
 					break; // sai do while
@@ -88,9 +91,9 @@ void inserir_perrengues(int matriz[3][3]) {
 	}
 }
 
-int condo_deboa(int matriz[3][3]) {
-	for(int i = 0; i < 3; i++) {
-		for(int j = 0; j < 3; j++) {
+int condo_deboa(int matriz[LINHAS][COLUNAS]) {
+	for(int i = 0; i < LINHAS; i++) {
+		for(int j = 0; j < COLUNAS; j++) {
 			if(matriz[i][j] >= 4) {
 				return 0;
 			}
@@ -100,104 +103,37 @@ int condo_deboa(int matriz[3][3]) {
 	return 1;
 }
 
-void troca_perrengues(int matriz[3][3]) {
-	int matriz_despejo[3][3] = {0};
+void troca_perrengues(int matriz[LINHAS][COLUNAS]) {
+	int matriz_despejo[LINHAS][COLUNAS] = {0};
 
-	// casa 00 --> canto: 2 j e 2 v
-	if (matriz[0][0] >= 4) {
-		matriz_despejo[0][0] = matriz_despejo[0][0] - 4;
-		// despeja no vizinho da direita
-		matriz_despejo[0][1]++;
-		// desepeja no vizinho debaixo
-		matriz_despejo[1][0]++;  
+	// Matriz como os deslocamentos para os vizinhos diretamente adjacentes
+    int deslocamentos[4][2] = {
+        {-1, 0}, // cima
+        {1, 0},  // baixo
+        {0, -1}, // esquerda
+        {0, 1},  // direita
+    };
+
+	for (int i = 0; i < LINHAS; i++) {
+		for (int j = 0; j < COLUNAS; j++) {
+			if (matriz[i][j] >= 4) { // se a casa tem perrengues, ela despeja 4
+				matriz_despejo[i][j] = -4;
+				for (int k = 0; k < 4; k++) { // joga os perrengues nos vizinhos adjacentes
+					int linha_viz = i + deslocamentos[k][0];
+					int coluna_viz = j + deslocamentos[k][1];
+
+					// Verificar se a posição está dentro dos limites da matriz
+					if (linha_viz >= 0 && linha_viz < LINHAS && coluna_viz >= 0 && coluna_viz < COLUNAS) {
+						matriz_despejo[linha_viz][coluna_viz]++;
+					}
+				}	
+			} 
+		}
 	}
 
-	// casa 01 --> meio: 1 j e 3 v
-	if (matriz[0][1] >= 4) {
-		matriz_despejo[0][1] = matriz_despejo[0][1] - 4;
-		// despeja no vizinho da esquerda
-		matriz_despejo[0][0]++;
-		// despeja no vizinho da direita
-		matriz_despejo[0][2]++;
-		// desepeja no vizinho debaixo
-		matriz_despejo[1][1]++;  
-	}
-
-	// casa 02 --> canto: 2 j e 2 v
-	if (matriz[0][2] >= 4) {
-		matriz_despejo[0][2] = matriz_despejo[0][2] - 4;
-		// despeja no vizinho da esquerda
-		matriz_despejo[0][1]++;
-		// desepeja no vizinho debaixo
-		matriz_despejo[1][2]++;  
-	}
-
-	// casa 10 --> meio: 1 j e 3 v
-	if (matriz[1][0] >= 4) {
-		matriz_despejo[1][0] = matriz_despejo[1][0] - 4;
-		// despeja no vizinho de cima
-		matriz_despejo[0][0]++;
-		// despeja no vizinho da direita
-		matriz_despejo[1][1]++;
-		// desepeja no vizinho debaixo
-		matriz_despejo[2][0]++;  
-	}
-
-	// casa 11 --> sindico: 0 j e 4 v
-	if (matriz[1][1] >= 4) {
-		matriz_despejo[1][1] = matriz_despejo[1][1] - 4;
-		// despeja no vizinho de cima
-		matriz_despejo[0][1]++;
-		// despeja no vizinho da esquerda
-		matriz_despejo[1][0]++;
-		// despeja no vizinho da direita
-		matriz_despejo[1][2]++;
-		// desepeja no vizinho debaixo
-		matriz_despejo[2][1]++;  
-	}
-
-	// casa 12 --> meio: 1 j e 3 v
-	if (matriz[1][2] >= 4) {
-		matriz_despejo[1][2] = matriz_despejo[1][2] - 4;
-		// despeja no vizinho de cima
-		matriz_despejo[0][2]++;
-		// despeja no vizinho da esquerda
-		matriz_despejo[1][1]++;
-		// desepeja no vizinho debaixo
-		matriz_despejo[2][2]++;  
-	}
-
-	// casa 20 --> canto: 2 j e 2 v
-	if (matriz[2][0] >= 4) {
-		matriz_despejo[2][0] = matriz_despejo[2][0] - 4;
-		// despeja no vizinho de cima
-		matriz_despejo[1][0]++;
-		// despeja no vizinho da direita
-		matriz_despejo[2][1]++;  
-	}
-
-	// casa 21 --> meio: 1 j e 3 v
-	if (matriz[2][1] >= 4) {
-		matriz_despejo[2][1] = matriz_despejo[2][1] - 4;
-		// despeja no vizinho de cima
-		matriz_despejo[1][1]++;
-		// despeja no vizinho da esquerda
-		matriz_despejo[2][0]++;
-		// despeja no vizinho da direita
-		matriz_despejo[2][2]++;  
-	}
-
-	// casa 22 --> canto: 1 j e 3 v
-	if (matriz[2][2] >= 4) {
-		matriz_despejo[2][2] = matriz_despejo[2][2] - 4;
-		// despeja no vizinho de cima
-		matriz_despejo[1][2]++;
-		// despeja no vizinho da esquerda
-		matriz_despejo[2][1]++;  
-	}
-
-	for(int i = 0; i < 3; i++) {
-		for(int j = 0; j < 3; j++) {
+	// gera nova configuração do condominio
+	for(int i = 0; i < LINHAS; i++) {
+		for(int j = 0; j < COLUNAS; j++) {
 			matriz[i][j] = matriz[i][j] + matriz_despejo[i][j];
 		}
 	}
