@@ -1,6 +1,10 @@
-// Programa: condomini.c 
-// Objetivo: simular a questão 5 da 40a Olimpíada de Matemática da Unicamp
-// Autor: João Pedro de Azevedo Zonzini @ 21/04/25
+/* 
+--------------------------------------------------------------------------|
+| Programa: condomini.c 												  |
+| Objetivo: simular a questão 5 da 40a Olimpíada de Matemática da Unicamp |
+| Autor: João Pedro de Azevedo Zonzini @ 21/04/25						  |
+--------------------------------------------------------------------------|
+*/ 
 
 // importação das bibliotecas padrões de C
 #include <stdlib.h>
@@ -9,10 +13,10 @@
 // generalização do tamanho do condominio
 #define LINHAS 3    // linhas da matriz que representa o condominio
 #define COLUNAS LINHAS
-// o condominio é quadrado
-// o numero de casas no condominio é LINHAS * COLUNAS
+/* o condominio é quadrado e o numero de casas
+ no condominio é (LINHAS * COLUNAS) */
 
-//declaração das funções
+// declaração das funções
 void printar_condo(int matriz[LINHAS][COLUNAS]); void inserir_perrengues(int matriz[LINHAS][COLUNAS]);
 int condo_deboa(int matriz[LINHAS][COLUNAS]); void troca_perrengues(int matriz[LINHAS][COLUNAS]);
 
@@ -22,7 +26,7 @@ int main(void){
 
 	// inicialização das variaveis noite e deboa
 	int noite = 0; // conta o # de noites
-	int deboa = 0; // variavel de estado do condominio
+	int deboa = 0; // variavel de estado do condominio --> zero significa pé de guerra
 
 	puts("Bem-vindo ao Condominio Planolandia! No Condomínio cada casa tem um número:");
 
@@ -48,7 +52,7 @@ int main(void){
 	printar_condo(condo);
 	puts("");
 
-	// analiza o estado do condominio antes da trocação de perrengues
+	// analizar o estado do condominio antes da trocação de perrengues
 	if (condo_deboa(condo)) {
 		printf("O Condominio está de boa.\n"); // não precisa fazer a troca de perrengues
 	} else {
@@ -126,8 +130,8 @@ int condo_deboa(int matriz[LINHAS][COLUNAS]) {
 }
 
 void troca_perrengues(int matriz[LINHAS][COLUNAS]) {
-	// inicialização de uma matriz temporária que vai registrar qual a diferença de perrengues
-	// entre a configuração atual e a configuração nova do condominio
+	/* inicialização de uma matriz temporária que vai registrar qual a diferença de perrengues
+	entre a configuração atual e a configuração nova do condominio */
 	int matriz_despejo[LINHAS][COLUNAS] = {0};
 
 	// matriz como os deslocamentos para os vizinhos diretamente adjacentes
@@ -148,9 +152,9 @@ void troca_perrengues(int matriz[LINHAS][COLUNAS]) {
 
 					// verificar se o vizinho está dentro dos limites da matriz
 					if (linha_viz >= 0 && linha_viz < LINHAS && coluna_viz >= 0 && coluna_viz < COLUNAS) {
-						// poderiamos tirar um perrengue de matriz_despejo[i][j] para cada vizinho
-						// mas já fizemos acima e assim não precisamos considerar as janelas
-						//vizinho válido --> despeja perrengue nele
+						/* poderiamos tirar um perrengue de matriz_despejo[i][j] para cada vizinho
+						mas já fizemos acima e assim não precisamos considerar as janelas */
+						// vizinho válido --> despeja perrengue nele
 						matriz_despejo[linha_viz][coluna_viz]++;
 					}
 				}	
