@@ -117,7 +117,7 @@ void troca_perrengues(int matriz[LINHAS][COLUNAS]) {
 	for (int i = 0; i < LINHAS; i++) {
 		for (int j = 0; j < COLUNAS; j++) {
 			if (matriz[i][j] >= 4) { // se a casa tem perrengues, ela despeja 4
-				matriz_despejo[i][j] = -4;
+				matriz_despejo[i][j] = matriz_despejo[i][j] - 4;
 				for (int k = 0; k < 4; k++) { // joga os perrengues nos vizinhos adjacentes
 					int linha_viz = i + deslocamentos[k][0];
 					int coluna_viz = j + deslocamentos[k][1];
