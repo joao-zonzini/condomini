@@ -11,17 +11,16 @@
 #include <stdio.h>
 
 // generalização do tamanho do condominio
-#define LINHAS 3    // linhas da matriz que representa o condominio
-#define COLUNAS LINHAS
-/* o condominio é quadrado e o numero de casas
- no condominio é (LINHAS * COLUNAS) */
+#define LINHAS 3    		// linhas da matriz que representa o condominio
+#define COLUNAS LINHAS		// o condomínio é quadrado
+// OBS: o numero de casas no condominio é (LINHAS ^ 2)
 
 // declaração das funções
 void printar_condo(int matriz[LINHAS][COLUNAS]); void inserir_perrengues(int matriz[LINHAS][COLUNAS]);
 int condo_deboa(int matriz[LINHAS][COLUNAS]); void troca_perrengues(int matriz[LINHAS][COLUNAS]);
 
 int main(void){
-	// inicialização da matriz condominio com zeros perrengues
+	// inicialização da matriz condominio com zero perrengues
 	int condo[LINHAS][COLUNAS] = {0};
 
 	// inicialização das variaveis noite e deboa
@@ -44,15 +43,17 @@ int main(void){
 
 	printf("Dê perrengues para cada casa. Lembre-se que o número de perrengues deve ser positivo.\n");
 	
-	// chama função que recebe o numero de perrengues em cada casa
+	// chama função que recebe do usuário o numero de perrengues em cada casa
 	inserir_perrengues(condo);
+	/* alternativa: o número de perrengues poderia ter sido "chumbado" no código
+	ou consultado em um arquivo */
 
 	// mostra de volta os perrengues para o usuario
 	printf("Os perrengues ficaram assim:\n\n");
 	printar_condo(condo);
 	puts("");
 
-	// analizar o estado do condominio antes da trocação de perrengues
+	// analisar o estado do condominio antes da trocação de perrengues
 	if (condo_deboa(condo)) {
 		printf("O Condominio está de boa.\n"); // não precisa fazer a troca de perrengues
 	} else {
@@ -72,6 +73,7 @@ int main(void){
 		printar_condo(condo);
 	}	// saiu do loop --> condominio ficou de boa
  
+	// se houve uma ou mais noites, houve troca e agora o condomínio está de boa
 	if (noite > 0) {
 		puts("-----------> de boa <-----------");
 		printf("Foram necessárias %d noites para o condomínio ficar de boa.\n", noite);
@@ -141,6 +143,7 @@ void troca_perrengues(int matriz[LINHAS][COLUNAS]) {
         {0, -1}, // esquerda
         {0, 1},  // direita
     };
+	// pode-se adicionar as direções diagonais para atingir mais vizinhos, mudando a dinâmica
 
 	for (int i = 0; i < LINHAS; i++) {
 		for (int j = 0; j < COLUNAS; j++) {
